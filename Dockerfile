@@ -1,2 +1,2 @@
-FROM php:8-apache
-#RUN apt-get update && apt-get install -y apache2 && apt-get clean && rm -rf /var/lib/apt/lists/*
+FROM httpd:2.4
+COPY ./public-html/ /usr/local/apache2/htdocs/
