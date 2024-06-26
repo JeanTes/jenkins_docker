@@ -8,12 +8,14 @@ pipeline {
         stage('Clone') {
             steps {
                 git branch: "main", url: 'https://github.com/josedom24/jenkins_docker.git'
+                echo "Se clona"
             }
         }
         stage('Build') {
             steps {
                 script {
                     newApp = docker.build "$IMAGEN:$BUILD_NUMBER"
+                    echo "Se buildea aka falsea"
                 }
             }
         }
@@ -23,6 +25,7 @@ pipeline {
                 script {
                     docker.image("$IMAGEN:$BUILD_NUMBER").inside('-u root') {
                            sh 'apache2ctl -v'
+                           echo "Se testea"
                         }
                     }
             }
@@ -33,14 +36,10 @@ pipeline {
                 script {
                     docker.withRegistry( '', USUARIO ) {
                         newApp.push()
+                        echo "Se publica"
                     }
                 }
             }
-        }
-        stage('Clean Up') {
-            steps {
-                sh "docker rmi $IMAGEN:$BUILD_NUMBER"
-                }
-        }
+        }        
     }
 }
